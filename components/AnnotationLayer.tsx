@@ -172,19 +172,25 @@ export function AnnotationLayer() {
     const sectionEl = document.querySelector(`[data-section-id="${composer.sectionId}"]`);
     const sectionText = sectionEl?.textContent ?? "";
     const anchor = buildAnchor(composer.sectionId, sectionText, composer.start, composer.end);
-    const created = await storeRef.current.create({
-      sectionId: composer.sectionId,
-      anchor,
-      body: body.trim(),
-      authorName: author.trim(),
-    });
-    setBody("");
-    setComposer(null);
-    setToolbar(null);
-    window.getSelection()?.removeAllRanges();
-    setFocusId(created.id);
-    setSidebarOpen(true);
-    setLiveMsg(`Comment posted by ${author.trim()}`);
+    try {
+      const created = await storeRef.current.create({
+        sectionId: composer.sectionId,
+        anchor,
+        body: body.trim(),
+        authorName: author.trim(),
+      });
+      setBody("");
+      setComposer(null);
+      setToolbar(null);
+      window.getSelection()?.removeAllRanges();
+      setFocusId(created.id);
+      setSidebarOpen(true);
+      setLiveMsg(`Comment posted by ${author.trim()}`);
+    } catch (err) {
+      const message = err instanceof Error ? err.message : "Failed to post comment";
+      setLiveMsg(message);
+      window.alert(message);
+    }
   }
 
   const ordered = [...annotations].sort(

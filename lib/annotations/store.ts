@@ -79,14 +79,27 @@ export class LocalAnnotationStore implements AnnotationStore {
   }
 }
 
+/**
+ * - `api` (default for shared comments): session-gated Next.js API → Supabase
+ * - `local`: browser localStorage only (single device)
+ * - `supabase`: direct browser → Supabase (requires open RLS; not recommended)
+ */
 export function createAnnotationStore(): AnnotationStore {
-  const mode = process.env.NEXT_PUBLIC_ANNOTATION_STORE ?? "local";
+  const mode = process.env.NEXT_PUBLIC_ANNOTATION_STORE ?? "api";
+
+  if (mode === "local") {
+    return new LocalAnnotationStore();
+  }
+
   if (mode === "supabase") {
-    // Lazy import to keep bundle small when using local
     const { SupabaseAnnotationStore } = require("./supabase-store") as {
       SupabaseAnnotationStore: new () => AnnotationStore;
     };
     return new SupabaseAnnotationStore();
   }
-  return new LocalAnnotationStore();
+
+  const { ApiAnnotationStore } = require("./api-store") as {
+    ApiAnnotationStore: new () => AnnotationStore;
+  };
+  return new ApiAnnotationStore();
 }

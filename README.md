@@ -24,9 +24,26 @@ All copy and figures live in `content/board-paper.ts`. Update that file when H2 
 | Variable | Purpose |
 |---|---|
 | `BOARD_PASSPHRASE` | Shared gate passphrase |
-| `NEXT_PUBLIC_ANNOTATION_STORE` | `local` (default) or `supabase` |
+| `NEXT_PUBLIC_ANNOTATION_STORE` | `api` (default, shared), `local` (device-only), or `supabase` |
 | `NEXT_PUBLIC_SUPABASE_URL` | Supabase project URL |
-| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Supabase anon key |
+| `SUPABASE_SERVICE_ROLE_KEY` | Server-only key for `/api/annotations` (preferred) |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Optional fallback / direct client mode |
+
+## Shared comments (backend)
+
+Comments are shared across authenticated viewers when `NEXT_PUBLIC_ANNOTATION_STORE=api`:
+
+1. Create a Supabase project
+2. Run `supabase/migrations/20260820120000_annotations.sql` in the SQL editor
+3. Set `NEXT_PUBLIC_SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` in `.env.local` / host env
+4. Restart the app
+
+Session-gated routes:
+
+- `GET/POST /api/annotations`
+- `PATCH/DELETE /api/annotations/[id]`
+
+Only users who pass the board passphrase can read or write comments. RLS denies direct anon access; the API uses the service role.
 
 ## Security — honest caveat
 
@@ -44,21 +61,3 @@ Signed-off additions documented in `styles/tokens.css`:
 - **Annotations:** cool blue family (`--color-highlight-fill`, etc.)
 - **TOC active:** brand green highlight — no pill
 - Interaction states, layout chrome, gate, watermark, print overrides
-
-## Annotations (Supabase)
-
-```sql
-create table annotations (
-  id uuid primary key default gen_random_uuid(),
-  doc_version text not null,
-  section_id text not null,
-  anchor jsonb not null,
-  body text not null,
-  author_name text not null,
-  parent_id uuid references annotations(id),
-  resolved_at timestamptz,
-  created_at timestamptz default now()
-);
-```
-
-Enable RLS aligned with your access gate before production.

@@ -6,6 +6,7 @@ import { GlossaryText } from "./GlossaryText";
 import { MetricCardView } from "./MetricCard";
 import { NarrativeHighlight } from "./NarrativeHighlight";
 import { PerformanceHighlights } from "./PerformanceHighlights";
+import { PhotoGallery } from "./PhotoGallery";
 import { RiskTable } from "./RiskTable";
 
 export function SubsectionView({ subsection }: { subsection: Subsection }) {
@@ -35,6 +36,9 @@ export function SubsectionView({ subsection }: { subsection: Subsection }) {
           {useNarrativeHighlight ? <NarrativeHighlight text={p} /> : <GlossaryText text={p} />}
         </p>
       ))}
+      {subsection.gallery && (
+        <PhotoGallery title={subsection.gallery.title} images={subsection.gallery.images} />
+      )}
       {subsection.tables?.map((t, i) => (
         <div key={i} className="mt-6 overflow-hidden rounded-lg border border-border-default">
           <DataTable table={t} />

@@ -1,3 +1,5 @@
+import { withAutoLinks } from "./ContentLinks";
+
 const WIN_PATTERNS: RegExp[] = [
   /(\+[\d.]+%)/g,
   /(ahead of budget)/gi,
@@ -72,6 +74,16 @@ function splitByPatterns(text: string): Part[] {
 }
 
 export function NarrativeHighlight({ text }: { text: string }) {
+  return (
+    <>
+      {withAutoLinks(text, (segment, key) => (
+        <NarrativeSegments key={key} text={segment} />
+      ))}
+    </>
+  );
+}
+
+function NarrativeSegments({ text }: { text: string }) {
   const parts = splitByPatterns(text);
 
   return (

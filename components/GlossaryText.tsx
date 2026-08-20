@@ -1,12 +1,17 @@
 "use client";
 
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 import { GLOSSARY } from "@/lib/glossary";
+import { withAutoLinks } from "./ContentLinks";
 
 const TERMS = Object.keys(GLOSSARY);
 
 export function GlossaryText({ text }: { text: string }) {
-  const parts: React.ReactNode[] = [];
+  return <>{withAutoLinks(text, (segment, key) => <GlossarySegments key={key} text={segment} />)}</>;
+}
+
+function GlossarySegments({ text }: { text: string }) {
+  const parts: ReactNode[] = [];
   let remaining = text;
   let key = 0;
 

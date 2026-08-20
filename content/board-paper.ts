@@ -71,6 +71,17 @@ export type ListBlock = {
   items: string[];
 };
 
+export type GalleryImage = {
+  src: string;
+  alt: string;
+  caption?: string;
+};
+
+export type PhotoGallery = {
+  title?: string;
+  images: GalleryImage[];
+};
+
 export type Subsection = {
   id: string;
   title?: string;
@@ -82,6 +93,7 @@ export type Subsection = {
   donut?: DonutChart;
   riskRows?: RiskRow[];
   lists?: ListBlock[];
+  gallery?: PhotoGallery;
 };
 
 export type Section = {
@@ -119,6 +131,7 @@ export const cover: CoverData = {
     { number: "7", title: "ESP Progress" },
     { number: "8", title: "Key Departmental Updates: HR, PMO, Finance" },
     { number: "9", title: "Fundraising: Justification and Use of Funds" },
+    { number: "10", title: "Photo Gallery" },
     { number: "—", title: "Annex" },
   ],
   metrics: [
@@ -685,6 +698,93 @@ export const sections: Section[] = [
             subtitle: "under AGRA",
           },
         ],
+      },
+    ],
+  },
+  {
+    id: "photo-gallery",
+    title: "10. Photo Gallery",
+    subsections: [
+      {
+        id: "field-operations-gallery",
+        title: "Field, community & milestones",
+        paragraphs: [
+          "Selected moments from Agriarche field operations, input distribution, community engagement, and H1 2026 milestones — including Cascador Pitch Day. Click any image to enlarge.",
+        ],
+        gallery: {
+          images: [
+            {
+              src: "/images/hero-field.png",
+              alt: "Agriarche field visit with farmers in a rice paddy",
+              caption: "Farmer visit",
+            },
+            {
+              src: "/images/gallery/01-input-distribution-women.png",
+              alt: "Women farmers with fertiliser bags and agro-inputs at a community distribution",
+              caption: "Input distribution — women farmers",
+            },
+            {
+              src: "/images/gallery/03-kasuwa-input-distribution.png",
+              alt: "Kasuwa team member with stacked NPK and Urea fertiliser during a distribution event",
+              caption: "Kasuwa input distribution",
+            },
+            {
+              src: "/images/gallery/04-community-input-distribution.png",
+              alt: "Community members gathered around rows of fertiliser bags and agrochemicals",
+              caption: "Input distribution",
+            },
+            {
+              src: "/images/gallery/08-farmers-friend-distribution.png",
+              alt: "Agriarche and community partners with fertiliser and agro-input supplies",
+              caption: "Input distribution",
+            },
+            {
+              src: "/images/gallery/10-beta-harvest-women.png",
+              alt: "Three women with fertiliser bags and agricultural supplies",
+              caption: "Input distribution",
+            },
+            {
+              src: "/images/gallery/06-field-visit-seedlings.png",
+              alt: "Field visit walking through young crop seedlings",
+              caption: "Field visit — young seedlings",
+            },
+            {
+              src: "/images/gallery/07-rice-field-inspection.png",
+              alt: "Team member inspecting a green rice field",
+              caption: "Rice field quality inspection",
+            },
+            {
+              src: "/images/gallery/02-food-security-speaker.png",
+              alt: "Speaker on stage at a Food Security event",
+              caption: "Food Security panel",
+            },
+            {
+              src: "/images/gallery/05-food-security-panel.png",
+              alt: "Speaker presenting at a Food Security conference",
+              caption: "Food Security conference",
+            },
+            {
+              src: "/images/gallery/09-event-team-portrait.png",
+              alt: "Agriarche team members at Cascador Pitch Day",
+              caption: "Cascador Pitch Day",
+            },
+            {
+              src: "/images/gallery/13-agriarche-cascador-award.png",
+              alt: "Agriarche team holding a ₦2.5 billion Cascador Pitch Day ceremonial cheque",
+              caption: "Cascador Pitch Day — ₦2.5bn facility",
+            },
+            {
+              src: "/images/gallery/12-cascador-pitch-day.png",
+              alt: "Finalists on stage with ceremonial cheques at Cascador Pitch Day 2026",
+              caption: "Cascador Pitch Day 2026",
+            },
+            {
+              src: "/images/gallery/11-agriarche-social-grid.png",
+              alt: "Agriarche H1 2026 highlights including Proparco partnership and Cascador win",
+              caption: "H1 2026 highlights",
+            },
+          ],
+        },
       },
     ],
   },

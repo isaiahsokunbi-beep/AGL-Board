@@ -45,6 +45,7 @@ const config: Config = {
         "selection-toolbar-bg": "var(--color-selection-toolbar-bg)",
         "selection-toolbar-text": "var(--color-selection-toolbar-text)",
         "watermark": "var(--color-watermark)",
+        link: "var(--color-link)",
       },
       fontFamily: {
         sans: ["var(--font-family-sans)", "system-ui", "sans-serif"],

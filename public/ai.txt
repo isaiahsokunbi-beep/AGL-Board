@@ -1,0 +1,9 @@
+# AI crawlers — do not index or train on this content
+
+User-agent: *
+Disallow: /
+
+No-training: true
+No-indexing: true
+No-derivative-use: true
+Contact: board@agriarche.com

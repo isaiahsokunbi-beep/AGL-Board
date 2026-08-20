@@ -1,0 +1,153 @@
+/**
+ * Design tokens — Agriarche H1 2026 Board Paper
+ * Figma source: ho2PvSHBgSU20v74ekysKW
+ * Signed-off §4.3 additions marked INVENTED
+ */
+
+:root {
+  /* ── Brand palette (logo + revenue ring SVG) ── */
+  --color-brand-orange: #f49425;
+  --color-brand-green: #008850;
+  --color-brand-rust: #e05206;
+  --color-brand-gold: #fcd116;
+  --color-brand-brown: #673b07;
+  --color-brand-gray: #76777a;
+
+  /* ── Figma published variables (alias) ── */
+  --color-agl-orange: var(--color-brand-orange);
+  --color-grays-white: #ffffff;
+
+  /* ── Surfaces & text ── */
+  --color-text-primary: #1e2a24;
+  --color-text-secondary: #5c6b62;
+  --color-text-meta: var(--color-brand-gray);
+  --color-surface-metric: #faf8f3;
+  --color-surface-page: #f7f5f0;
+  --color-surface-card: #ffffff;
+  --color-surface-hero-overlay: linear-gradient(
+    135deg,
+    rgba(0, 136, 80, 0.38) 0%,
+    rgba(30, 42, 36, 0.28) 55%,
+    rgba(244, 148, 37, 0.18) 100%
+  );
+  --color-border-default: #e4e0d8;
+  --color-border-strong: var(--color-brand-brown);
+  --color-chart-track: #ede8db;
+  --color-chart-budget: #d8cfba;
+  --color-chart-local-trade: var(--color-brand-orange);
+  --color-chart-projects: var(--color-brand-brown);
+  --color-chart-export: var(--color-brand-rust);
+  --color-loss-value: var(--color-brand-rust);
+
+  /* ── INVENTED: variance semantics (signed-off) ──
+   * Use ONLY on variance figures, sign glyphs, and arrows — never surfaces/badges/chart fills */
+  --color-variance-favourable: var(--color-brand-green);
+  --color-variance-unfavourable: var(--color-brand-rust);
+
+  --color-selection-bg: color-mix(in srgb, var(--color-brand-orange) 38%, transparent);
+  --color-selection-text: var(--color-text-primary);
+
+  /* ── INVENTED: annotation layer (signed-off cool blue family) ── */
+  --color-highlight-fill: #dce6f0;
+  --color-highlight-active: #c3d5e6;
+  --color-highlight-resolved: #eceef0;
+  --color-comment-marker: #5b7c99;
+  --color-comment-border: #5b7c99;
+  --color-comment-surface: var(--color-grays-white);
+  --color-selection-toolbar-bg: #2f2e2e;
+  --color-selection-toolbar-text: var(--color-grays-white);
+
+  /* ── Revenue ring segment fills (brand SVG) ── */
+  --color-donut-segment-0: var(--color-brand-orange);
+  --color-donut-segment-1: var(--color-brand-green);
+  --color-donut-segment-2: var(--color-brand-rust);
+  --color-donut-segment-3: var(--color-brand-gold);
+  --color-donut-segment-4: var(--color-brand-brown);
+
+  /* ── Interaction states ── */
+  --color-focus-ring: var(--color-brand-orange);
+  --color-toc-hover: #faf8f3;
+  --color-toc-active-border: var(--color-brand-green);
+  --color-toc-active-text: var(--color-brand-green);
+  --color-table-row-hover: color-mix(in srgb, var(--color-surface-metric) 65%, transparent);
+  --color-glossary-underline: var(--color-text-secondary);
+  --color-link: var(--color-brand-rust);
+
+  /* ── INVENTED: layout chrome ── */
+  --color-rail-bg: var(--color-surface-card);
+  --color-rail-border: var(--color-border-default);
+  --color-progress-bar: linear-gradient(
+    90deg,
+    var(--color-brand-green),
+    var(--color-brand-orange)
+  );
+  --color-gate-bg: var(--color-surface-page);
+  --color-gate-surface: var(--color-surface-card);
+  --color-watermark: color-mix(in srgb, var(--color-text-primary) 3%, transparent);
+
+  /* ── Typography families ── */
+  --font-family-sans: "Montserrat", system-ui, sans-serif;
+  --font-family-numerals: "Montserrat", system-ui, sans-serif;
+
+  /* ── Type scale (from Figma inspect) ── */
+  --text-display-cover-size: 2.5rem;
+  --text-display-cover-leading: 1.15;
+  --text-heading-cover-sub-size: 1.125rem;
+  --text-heading-cover-sub-leading: 1.5rem;
+  --text-heading-cover-sub-tracking: 0;
+  --text-heading-section-size: 1.375rem;
+  --text-heading-section-leading: 1.35;
+  --text-heading-section-tracking: -0.01em;
+  --text-heading-subsection-size: 1rem;
+  --text-heading-subsection-leading: 1.6rem;
+  --text-heading-subsection-tracking: 0.02rem;
+  --text-heading-toc-size: 0.9375rem;
+  --text-heading-toc-leading: 1.5rem;
+  --text-heading-toc-tracking: 0.075rem;
+  --text-body-size: 0.9375rem;
+  --text-body-leading: 1.65rem;
+  --text-meta-size: 0.8125rem;
+  --text-meta-leading: 1.3rem;
+  --text-label-metric-size: 0.65625rem;
+  --text-label-metric-leading: 1.05rem;
+  --text-label-metric-tracking: 0.033rem;
+  --text-value-metric-size: 1.5rem;
+  --text-value-metric-leading: 2.4rem;
+  --text-label-table-size: 0.71875rem;
+  --text-label-table-leading: 1.15rem;
+  --text-label-table-tracking: 0.029rem;
+  --text-cell-table-size: 0.84375rem;
+  --text-cell-table-leading: 1.35rem;
+  --text-label-chart-size: 0.6875rem;
+  --text-label-chart-leading: 1.1rem;
+  --text-label-chart-tracking: 0.034rem;
+  --text-value-chart-size: 0.75rem;
+  --text-value-chart-leading: 1.2rem;
+
+  /* ── Spacing & layout ── */
+  --space-page-x: 1.25rem;
+  --space-card-inner: 1.125rem;
+  --space-section-top: 2.5rem;
+  --space-metric-gap: 1rem;
+  --measure-prose: 68ch;
+  --measure-content: 52rem;
+  --width-toc-rail: 14.5rem;
+  --height-hero: 22rem;
+  --height-progress-bar: 2px;
+  --size-bar-height: 14px;
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+  --radius-xl: 24px;
+  --border-table-header: 1.5px;
+  --border-table-row: 1px;
+  --border-toc-active: 2px;
+
+  /* ── Figma Shadoww ── */
+  --shadow-card: 0 4px 24px rgba(30, 42, 36, 0.06);
+  --shadow-card-hover: 0 8px 32px rgba(30, 42, 36, 0.1);
+  --shadow-rail: 0 2px 16px rgba(30, 42, 36, 0.05);
+
+  /* ── Scroll offset for anchor links ── */
+  --scroll-margin-section: calc(var(--height-progress-bar) + 1rem);
+}

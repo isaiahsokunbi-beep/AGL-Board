@@ -1,0 +1,227 @@
+{
+  "exec": [
+    "H1 2026 delivered revenue broadly in line with a challenging budget, but full-year profitability was materially below plan once the complete cost base is reflected. Revenue reached ₦1,123.6M, 51.5% of the confirmed ₦2,180.9M H1 budget, on volume of 840.4 MT across 41 trades, with gross margin of 18.1%. After ₦38.6M in finance costs, the net loss was ₦73.6M.",
+    "The ₦1,057.3M shortfall against the original revenue budget remains the primary driver of H1 underperformance. Management accounts show gross margin essentially on budget (18.1% actual vs 18.7% budget); the swing to a ₦73.6M net loss reflects logistics, administrative, and finance costs that did not scale down with lower trade volumes, on top of the revenue shortfall itself. The shortfall traces to three root causes, all addressable in H2: a supply sourcing gap driven by spot-market procurement and farmer price misalignment; operational gaps including 5% weight loss and quality and coordination issues; and pricing volatility.",
+    "Export sales were the largest single driver of the shortfall, at 93.4% below budget pending NEXIM facility disbursement, this emerged due to trade disruptions due to war. Local Trades also under-shot at 47.5% below budget. Projects was the one bright spot, closing H1 at 49.1% ahead of budget."
+  ],
+  "risks": [
+    [
+      "Operations",
+      "Weight loss averaging 5% in H1",
+      "Rooted in staff gaps and operational overlaps, weighing scale anomalies",
+      "Partnership with weigh bridges close to centres to firm weight position before leaving and logistics companies to verify weight consistency"
+    ],
+    [
+      "Operations",
+      "Quality and coordination gaps",
+      "Below-spec deliveries, delivery delays",
+      "Expert training consistently to establish competence. Hiring level of staff"
+    ],
+    [
+      "Operations",
+      "Supply shocks during planting season",
+      "Revenue uncertainty",
+      "Diversify commodities mix, expand and focus staff on specific regions, unlock supply- led model."
+    ],
+    [
+      "Operations",
+      "Margin-pressures",
+      "Over 80% of our margins spent on logistics reducing Operating profit.",
+      "In house logistics infrastructure, Prioritize LPO issuing companies.."
+    ],
+    [
+      "Operations",
+      "Global geopolitics - Strait closure and pressures.",
+      "Longer TAT for exports, Impacts Buyer trust",
+      "Expand scope of shippers and ports of dispatch e.g Ghana"
+    ],
+    [
+      "Operations",
+      "Team communication breakdowns",
+      "Execution slippage across trade cycles",
+      "Internal Reporting Dashboard live since May 2026 for end-to-end trade visibility"
+    ],
+    [
+      "PMO",
+      "Farmer KYC gaps",
+      "Majority of farmers lack BVN/NIN documentation",
+      "Field agent support for BVN/NIN acquisition (ongoing), Prioritizing only verified farmers."
+    ],
+    [
+      "PMO",
+      "Delayed disbursements/Reconciliation",
+      "Delayed payments from partners, Delay on projections",
+      "Train and equip finance coordination, Restructure step down training for all staff on project expectations."
+    ],
+    [
+      "Finance",
+      "CFO concentration/gaps",
+      "Delay in deliverables and firm grip on financials, Harmonize cash flow with budget",
+      "Hire a CFO in H2"
+    ],
+    [
+      "Finance",
+      "Cash flow and seasonality",
+      "Missed Sales",
+      "Align cash flow to seasonality."
+    ]
+  ],
+  "h2": {
+    "##": {
+      "bullets": [
+        "Cascador first tranche ₦1.5B of a ₦2.5B facility (₦1B NEXIM export facility + ₦1.5B Sterling Bank facility), expected late Q3: deploy for 38+ trades per month",
+        "Legal Cps pending.",
+        "Export pipeline conversion: $670k signed export pipeline delivered through H2, supported by the NEXIM export facility",
+        "Local trade: continued focus alongside export",
+        "Additional Warehouse activation: Zonkwo and Niger.,"
+      ],
+      "paras": [
+        "Cascador Deployment, Export & Local Trade Scaling (September–December)**"
+      ]
+    },
+    "Ghana Expansion": {
+      "bullets": [],
+      "paras": [
+        "A shea butter pilot linking Ghana to the EU market is already operational through a live joint venture. H2 2026 work focuses on establishing in Ghana: scoping the opportunity and identifying potential internal or external partners, alongside standing up a field and sales team and hiring a Ghana Operations Manager. - [link](https://docs.google.com/spreadsheets/d/1VR08Pjl6Y0GL1MkCIEYJeh9PyAqibsTWmIT_JX89l60/edit?usp=sharing)"
+      ]
+    },
+    "Fintech Model": {
+      "bullets": [
+        "*Logistics**",
+        "*Sahel Repayment**",
+        "*Fundraise Strategy**"
+      ],
+      "paras": [
+        "Agriarche's fintech model extends beyond input financing to deliver a broader suite of financial and trade services tailored to rural agricultural communities. While input financing is a key component, the platform is designed to facilitate deposits, payments, trade transactions, and other financial products that support the agricultural value chain.",
+        "In 2026 so far, approximately 3.5% of deposits originate from non-trade users, demonstrating strong adoption beyond commodity trading and highlighting the opportunity to serve both trade and non-trade customers in underserved rural markets.",
+        "Input financing has already been launched, with over 700 farmers financed in 2026 across the dry and wet seasons through the Trade Lenda programme. The business is targeting 2,000 farmers, with further scale expected as the model becomes more structured and operates under the appropriate licensing framework.",
+        "The pace and scale of expansion will significantly enable the business to increase outreach, deepen financial inclusion, and deliver greater impact across rural communities. - Link",
+        "Logistics costs have doubled over a 2 year period from an average of 650k to 1.3m per truck and this has placed pressure on our gross margins. Immediate ways to cope are to increase vols, diversify more to exports and reduce other costs. There are also not as many available trucks during harvest seasons to maximize our potential especially in areas with high volumes of commodities.",
+        "Hence, we propose owning our own fleet, outsourcing the mgt of these trucks . This will increase our volumes, reduce costs and improve our delivery time as well as our cash conversion cycle. The goal is to use electric 40ft trucks as opposed to CNG as CNG infrastructure is government dependent and development in core rural regions is not bankable.",
+        "This model will need a specialist to define the opportunities, impact on business and mgt processes. It is currently added to our ESP pillars.",
+        "To be closed in Q4, all scheduled tranched payment so far this year has been met. Payout places a burden on cash flow but with our cash flow mgt tool, we have prioritized business expectations to prevent any shortfall.",
+        "Learnings - is to actively have sufficient cash flow and reduce business risk to maintain a stable cash flow",
+        "We will commence an equity raise to support our debt need, hire, market, expand to Ghana, expand exports to the EU markets and begin initial logistics infrastructure build out.",
+        "Also our future fundraise strategy is attached. [Fundraise Strategy](https://docs.google.com/document/d/1pCxoe400BOuoiH4GL0JsqpMUwTu8Oa0KQxHgLpcrDT0/edit?usp=sharing)"
+      ]
+    }
+  },
+  "kasuwa": {
+    "overview": [
+      "Kasuwa in its current Phase is a demand-led model, where food processors place orders and Kasuwa reaches out through its Fulfillment Centres to fulfil demand, alongside the introduction of aggregator-led fulfilment across operating regions. Users also have wallets to receive and send money with other benefits like check prices, and available orders."
+    ],
+    "h2focus_paras": [
+      "H2 will focus on zoning community centres into key states for focus and deeper penetration under Zonal Coordinators, consolidating all key Agriarche activities in those areas under a structured leadership.",
+      "H2 features include listings, logistics module, and agent app. The logistics module is to automate all hauling activities on the platform, from logistics partner onboarding to fleet management, dispatching, tracking, and payments. Currently, payment and sourcing of logistics are done manually, this module is to enable end-to-end order tracking from seller dispatch to buyer receipt. The listing side will allow sellers (farmers & Aggregators) to list commodities for sale or purchase without waiting for a direct order from buyer, thereby creating increased visibility and market accessibility. This will drive buyer conversion and increase platform activities. The Agent App will allow Field agents to carry out onboarding for farmers, aggregators or buyers, monitor farms, coordinate deliveries especially at the IP side, serving as bridge between the platform and the rural communities. This will drive numbers and usage level, expand the reach of kasuwa, while creating impact.",
+      "The input credit was built to enable farmers to access essential agricultural inputs through financing, helping to improve productivity, profitability, and adoption of modern farming practices. This will be deployed for the coming dry season farming.",
+      "Furthermore, the fintech part of the platform is currently building out and would commence in H2 so we structure for the bank aspect of our trajectory."
+    ],
+    "h2focus_bullets": []
+  },
+  "esp_para": [
+    "ESP (Mastercard Foundation) is providing technical assistance across three verticals. Given this work is already embedded in day-to-day operational efficiency, it is tracked here as a standing progress grid rather than as a separate Control Tower session."
+  ],
+  "esp_rows": [
+    [
+      "1. Pricing Market Intelligence",
+      "Pricing market and intelligence build-out and expansion consultancy",
+      "Beginning Q3 2026. Preliminary conversations complete and all stakeholders aligned; awaiting ESP disbursement to consultants before mobilisation"
+    ],
+    [
+      "2. Input Credit Structuring",
+      "Structuring support for input credit facility design and a Credit scoring system for farmers.",
+      "Needed – TA request"
+    ],
+    [
+      "3. Quality Control training for all Supply Chain staff",
+      "Training all field staff on handling, sourcing and guidelines to reduce losses or theft.",
+      "Needed – TA request"
+    ],
+    [
+      "3. Fundraising Support",
+      "Support for infrastructural play: fulfilment centre and logistics",
+      "Ongoing Proposal Structuring"
+    ],
+    [
+      "4. Kasuwa/Tech Audit",
+      "",
+      "In Progress"
+    ]
+  ],
+  "hr_bullets": [
+    "Employee engagement survey: 70% participation, 82% satisfaction score",
+    "Top strengths identified: role clarity, team collaboration, supervisor support",
+    "Improvement areas: career growth, recognition, internal communication",
+    "Recruitment SOP formalized, with Granary implementation underway",
+    "Job descriptions updated across all roles, reinforcing role clarity",
+    "Balanced scorecard introduced organization-wide for performance visibility",
+    "Performance review process deployed, with manager communication completed",
+    "Learning programs: ESG learning launched; Distinction AI approved"
+  ],
+  "pmo_bullets": [
+    "Propcom+ project successfully closed out. Impact: 23,000+ farmers trained across Northern communities",
+    "Trade Lenda 2025 Dry Season (AICS): 700+ female farmers valued at (N400m) financed across 6 states with zero defaults so far. Targeting 2,000 farmers in 2027 prioritizing already financed farmers.",
+    "New project partnership with AGRA was unlocked. The Women in Rice Value Chain Project valued at $82,000 is a 12 months consortium project aimed at Advancing Inclusive and Resilient Agri-Food Systems through Smart Farming and Digital Solutions for 20,130 Women and Youth in Kaduna and Niger State, Nigeria.",
+    "Oyu Green Initiative (carbon credit): 2,800+ farmers with 2,800ha of farmlands were mapped for carbon credit benefits. Farmers onboarding is still ongoing to reach the 5,000 hectares target.of farmer onboarding, supported by weekly field agent visits and monthly AGL team visits"
+  ],
+  "fund_para": [
+    "Agriarche is raising a $1.5M equity bridge round to expand into Ghana and fund the initial setup of its fintech infrastructure, strategic hires, marketing and support debt raise efforts (as leverage for more debt)."
+  ],
+  "uof_rows": [
+    [
+      "Ghana Expansion",
+      "Legal and Business registration, identify partners, set up a field and sales team, and hire a Ghana Operations Manager"
+    ],
+    [
+      "Logistics",
+      "Fund warehouse activation at Zonkwo and Niger and supporting fulfilment infrastructure"
+    ],
+    [
+      "Staff",
+      "Key hires including QA Officer, Fintech Product mgr, Growth marketer, CFO and dedicated Zonal coordinators to scale trade execution"
+    ],
+    [
+      "Fintech Activation",
+      "Scale Input financing toward the 2,000-farmer target and fund the initial setup and licensing of financial services."
+    ],
+    [
+      "Marketing",
+      "Execute Go to market and consolidation of activities within our states of operations."
+    ],
+    [
+      "Debt fundraise support",
+      "Leverage on equity to use as BGs or cash collateral to unlock capital for working capital and other needs."
+    ]
+  ],
+  "impact": [
+    "700+ farmers financed in 2026 through Trade Lenda, targeting 2,000",
+    "23,000+ farmers onboarded and trained under the Propcom+ Garkuwan Manoma Project",
+    "2,800 smallholder farmers and 2,800 hectares targeted for farmer onboarding under the Carbon credit- Oyu Green Initiative",
+    "197 CBA (Community Base Advisors) trained and onboarded on Kasuwa under AGRA"
+  ],
+  "annex": {
+    "##": {
+      "paras": [],
+      "bullets": [
+        "## Farmer Capacity Building: Delivered in 31 locations, equipping farmers with improved agronomic practices, post-harvest handling, and business management skills.",
+        "## Financial Services (Input Credit & Payments): Extended to 16 locations, improving farmers' access to input financing and digital payment solutions, thereby reducing financial barriers to production and trade.",
+        "## Fulfilment Centres: Established in 11 locations, providing aggregation, storage, and market linkage infrastructure that enhances commodity collection and distribution efficiency.",
+        "## Mite'ra Centre: 1 retail centre established in Port Harcourt to support market access for value-added agricultural products."
+      ]
+    },
+    "AGL Strategy Snapshot": {
+      "paras": [
+        "Execution stage - Trading for local and international markets set up and running. Scale needed for expansion of centres, increase in buyers, working capital injection and tech upgrade to shift to a supply led model to accommodate other value chains. Process currently tightened and stress tested.",
+        "Manual execution of input credit scheme with automation underway in H2 defining all credit rules for farmers and agents.",
+        "Institutional investors locked in with an outlook of involving HNIs and individuals through structured finance programs - dependent on MFB and platform readiness for investor clarity",
+        "To deal with more structured Input processors as opposed to agrodealers yet to determine benefit to avoid creating a competition scenario on the field.",
+        "Restructure Retail segment for scale and impact by employing its focus leader"
+      ],
+      "bullets": []
+    },
+    "Link to 5-Year Financial Projections": {
+      "paras": [],
+      "bullets": []
+    }
+  }
+}

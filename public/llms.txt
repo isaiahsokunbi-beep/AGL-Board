@@ -1,0 +1,9 @@
+# Agriarche H1 2026 Board Paper
+
+This site contains confidential unaudited financial information.
+
+User-agent: *
+Disallow: /
+
+# No training, no indexing, no derivative use
+Contact: board@agriarche.com

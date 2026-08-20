@@ -2,7 +2,6 @@ import { NextResponse } from "next/server";
 import { isAuthenticated } from "@/lib/auth/session";
 import {
   deleteAnnotation,
-  isAnnotationsDbConfigured,
   updateAnnotation,
 } from "@/lib/annotations/db";
 
@@ -11,12 +10,6 @@ type Params = { params: Promise<{ id: string }> };
 export async function PATCH(request: Request, { params }: Params) {
   if (!(await isAuthenticated())) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
-  if (!isAnnotationsDbConfigured()) {
-    return NextResponse.json(
-      { error: "Shared annotations are not configured." },
-      { status: 503 },
-    );
   }
 
   try {
@@ -39,12 +32,6 @@ export async function PATCH(request: Request, { params }: Params) {
 export async function DELETE(_request: Request, { params }: Params) {
   if (!(await isAuthenticated())) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
-  if (!isAnnotationsDbConfigured()) {
-    return NextResponse.json(
-      { error: "Shared annotations are not configured." },
-      { status: 503 },
-    );
   }
 
   try {

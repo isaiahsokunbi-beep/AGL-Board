@@ -31,19 +31,21 @@ All copy and figures live in `content/board-paper.ts`. Update that file when H2 
 
 ## Shared comments (backend)
 
-Comments are shared across authenticated viewers when `NEXT_PUBLIC_ANNOTATION_STORE=api`:
-
-1. Create a Supabase project
-2. Run `supabase/migrations/20260820120000_annotations.sql` in the SQL editor
-3. Set `NEXT_PUBLIC_SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` in `.env.local` / host env
-4. Restart the app
-
-Session-gated routes:
+With `NEXT_PUBLIC_ANNOTATION_STORE=api`, comments go through session-gated routes:
 
 - `GET/POST /api/annotations`
 - `PATCH/DELETE /api/annotations/[id]`
 
-Only users who pass the board passphrase can read or write comments. RLS denies direct anon access; the API uses the service role.
+**Without Supabase**, the API stores comments in `data/annotations.json` on the server (shared for everyone using that same running instance).
+
+**With Supabase** (recommended for production / multi-host):
+
+1. Create a Supabase project
+2. Run `supabase/migrations/20260820120000_annotations.sql` in the SQL editor
+3. Set `NEXT_PUBLIC_SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY`
+4. Restart the app
+
+Only users who pass the board passphrase can read or write comments.
 
 ## Security — honest caveat
 

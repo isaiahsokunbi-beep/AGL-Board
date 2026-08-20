@@ -4,7 +4,7 @@ type Listener = (annotations: Annotation[]) => void;
 
 /**
  * Client store that talks to session-gated /api/annotations.
- * All authenticated viewers share the same comments (backed by Supabase).
+ * Shared across authenticated viewers (Supabase if configured, else server file store).
  */
 export class ApiAnnotationStore implements AnnotationStore {
   private listeners = new Set<Listener>();
@@ -18,10 +18,6 @@ export class ApiAnnotationStore implements AnnotationStore {
 
   private async refresh(): Promise<Annotation[]> {
     const res = await fetch("/api/annotations", { credentials: "same-origin" });
-    if (res.status === 503) {
-      this.emit([]);
-      return [];
-    }
     if (!res.ok) {
       const err = await res.json().catch(() => ({}));
       throw new Error((err as { error?: string }).error ?? "Failed to load annotations");

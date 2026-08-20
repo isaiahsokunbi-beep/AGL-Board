@@ -1,5 +1,11 @@
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 import { DOC_VERSION } from "@/content/board-paper";
+import {
+  fileCreateAnnotation,
+  fileDeleteAnnotation,
+  fileListAnnotations,
+  fileUpdateAnnotation,
+} from "./file-store";
 import type { Annotation, CreateAnnotationInput } from "./types";
 
 export type AnnotationRow = {
@@ -60,6 +66,8 @@ export function isAnnotationsDbConfigured(): boolean {
 }
 
 export async function listAnnotations(): Promise<Annotation[]> {
+  if (!isAnnotationsDbConfigured()) return fileListAnnotations();
+
   const db = getAnnotationsDb();
   const { data, error } = await db
     .from("annotations")
@@ -73,6 +81,8 @@ export async function listAnnotations(): Promise<Annotation[]> {
 export async function createAnnotation(
   input: CreateAnnotationInput,
 ): Promise<Annotation> {
+  if (!isAnnotationsDbConfigured()) return fileCreateAnnotation(input);
+
   const db = getAnnotationsDb();
   const { data, error } = await db
     .from("annotations")
@@ -94,6 +104,8 @@ export async function updateAnnotation(
   id: string,
   patch: Partial<Pick<Annotation, "body" | "resolvedAt">>,
 ): Promise<Annotation> {
+  if (!isAnnotationsDbConfigured()) return fileUpdateAnnotation(id, patch);
+
   const db = getAnnotationsDb();
   const payload: Record<string, unknown> = {};
   if (patch.body !== undefined) payload.body = patch.body;
@@ -110,6 +122,8 @@ export async function updateAnnotation(
 }
 
 export async function deleteAnnotation(id: string): Promise<void> {
+  if (!isAnnotationsDbConfigured()) return fileDeleteAnnotation(id);
+
   const db = getAnnotationsDb();
   const { error: childError } = await db
     .from("annotations")

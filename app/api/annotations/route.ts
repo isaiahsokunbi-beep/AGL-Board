@@ -11,19 +11,13 @@ export async function GET() {
   if (!(await isAuthenticated())) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
-  if (!isAnnotationsDbConfigured()) {
-    return NextResponse.json(
-      {
-        error:
-          "Shared annotations are not configured. Set Supabase env vars on the server.",
-      },
-      { status: 503 },
-    );
-  }
 
   try {
     const annotations = await listAnnotations();
-    return NextResponse.json({ annotations });
+    return NextResponse.json({
+      annotations,
+      backend: isAnnotationsDbConfigured() ? "supabase" : "file",
+    });
   } catch (err) {
     const message = err instanceof Error ? err.message : "Failed to list annotations";
     return NextResponse.json({ error: message }, { status: 500 });
@@ -33,12 +27,6 @@ export async function GET() {
 export async function POST(request: Request) {
   if (!(await isAuthenticated())) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
-  if (!isAnnotationsDbConfigured()) {
-    return NextResponse.json(
-      { error: "Shared annotations are not configured." },
-      { status: 503 },
-    );
   }
 
   try {
@@ -53,7 +41,13 @@ export async function POST(request: Request) {
       authorName: body.authorName.trim(),
       parentId: body.parentId ?? null,
     });
-    return NextResponse.json({ annotation }, { status: 201 });
+    return NextResponse.json(
+      {
+        annotation,
+        backend: isAnnotationsDbConfigured() ? "supabase" : "file",
+      },
+      { status: 201 },
+    );
   } catch (err) {
     const message = err instanceof Error ? err.message : "Failed to create annotation";
     return NextResponse.json({ error: message }, { status: 500 });

@@ -21,9 +21,11 @@ function budgetDelta(actual: string, budget: string): { pct: number; beat: boole
 export function BarChartView({ chart }: { chart: BarChartType }) {
   const ref = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
-  const reduced =
-    typeof window !== "undefined" &&
-    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const [reduced, setReduced] = useState(false);
+
+  useEffect(() => {
+    setReduced(window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+  }, []);
 
   useEffect(() => {
     const el = ref.current;
@@ -41,22 +43,30 @@ export function BarChartView({ chart }: { chart: BarChartType }) {
     return () => obs.disconnect();
   }, []);
 
-  const maxBudget = Math.max(...chart.items.map((i) => parseAmount(i.budget)), 1);
+  const maxValue = Math.max(
+    1,
+    ...chart.items.flatMap((i) => [parseAmount(i.actual), parseAmount(i.budget)]),
+  );
 
   return (
-    <figure ref={ref} className="chart-visual mt-6 rounded-lg border border-border-default bg-surface-metric p-5 sm:p-6">
+    <figure
+      ref={ref}
+      className="chart-visual mt-6 overflow-hidden rounded-lg border border-border-default bg-surface-metric p-4 sm:p-5 md:p-6"
+    >
       <figcaption className="text-sm font-semibold text-text-primary">
         {chart.title}
       </figcaption>
-      <div className="mt-4 space-y-4">
+      <div className="mt-4 space-y-5">
         {chart.items.map((item, idx) => {
-          const actualPct = (parseAmount(item.actual) / maxBudget) * 100;
-          const budgetPct = (parseAmount(item.budget) / maxBudget) * 100;
+          const actualPct = Math.min(100, (parseAmount(item.actual) / maxValue) * 100);
+          const budgetPct = Math.min(100, (parseAmount(item.budget) / maxValue) * 100);
           const delay = reduced ? 0 : idx * 60;
           const delta = budgetDelta(item.actual, item.budget);
+          const hasBudget = Boolean(item.budget.trim());
+
           return (
-            <div key={item.label}>
-              <div className="flex flex-wrap items-center gap-2">
+            <div key={item.label} className="min-w-0">
+              <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
                 <p className="text-[13px] font-semibold text-text-primary">{item.label}</p>
                 {delta && (
                   <span
@@ -70,34 +80,44 @@ export function BarChartView({ chart }: { chart: BarChartType }) {
                   </span>
                 )}
               </div>
-              <div className="mt-1 flex items-center gap-2">
-                <span className="w-[52px] text-[11px] text-text-secondary">Actual</span>
-                <div className="relative h-chart-bar flex-1 rounded-full bg-chart-track">
-                  <div
-                    className="absolute inset-y-0 left-0 rounded-full bg-chart-local-trade transition-[width] duration-700 ease-out"
-                    style={{
-                      width: visible ? `${actualPct}%` : "0%",
-                      transitionDelay: `${delay + 60}ms`,
-                    }}
-                  />
-                </div>
-                <span className="tabular-nums w-20 text-right text-value-chart">{item.actual}</span>
-              </div>
-              {item.budget.trim() && (
-                <div className="mt-1 flex items-center gap-2">
-                  <span className="w-[52px] text-[11px] text-text-secondary">Budget</span>
-                  <div className="relative h-chart-bar flex-1 rounded-full bg-chart-track">
+
+              <div className="mt-2 space-y-2">
+                <div className="min-w-0">
+                  <div className="mb-1 flex items-center justify-between gap-2 text-[11px]">
+                    <span className="text-text-secondary">Actual</span>
+                    <span className="tabular-nums font-semibold text-text-primary">
+                      {item.actual}
+                    </span>
+                  </div>
+                  <div className="relative h-chart-bar w-full min-w-0 overflow-hidden rounded-full bg-chart-track">
                     <div
-                      className="absolute inset-y-0 left-0 rounded-full bg-chart-budget transition-[width] duration-700 ease-out"
+                      className="absolute inset-y-0 left-0 max-w-full rounded-full bg-chart-local-trade transition-[width] duration-700 ease-out"
                       style={{
-                        width: visible ? `${budgetPct}%` : "0%",
-                        transitionDelay: `${delay}ms`,
+                        width: visible ? `${actualPct}%` : "0%",
+                        transitionDelay: `${delay + 60}ms`,
                       }}
                     />
                   </div>
-                  <span className="tabular-nums w-20 text-right text-value-chart">{item.budget}</span>
                 </div>
-              )}
+
+                {hasBudget && (
+                  <div className="min-w-0">
+                    <div className="mb-1 flex items-center justify-between gap-2 text-[11px]">
+                      <span className="text-text-secondary">Budget</span>
+                      <span className="tabular-nums text-text-secondary">{item.budget}</span>
+                    </div>
+                    <div className="relative h-chart-bar w-full min-w-0 overflow-hidden rounded-full bg-chart-track">
+                      <div
+                        className="absolute inset-y-0 left-0 max-w-full rounded-full bg-chart-budget transition-[width] duration-700 ease-out"
+                        style={{
+                          width: visible ? `${budgetPct}%` : "0%",
+                          transitionDelay: `${delay}ms`,
+                        }}
+                      />
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
           );
         })}

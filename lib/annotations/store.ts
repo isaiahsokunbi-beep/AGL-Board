@@ -68,7 +68,19 @@ export class LocalAnnotationStore implements AnnotationStore {
   }
 
   async delete(id: string): Promise<void> {
-    save(load().filter((a) => a.id !== id && a.parentId !== id));
+    const all = load();
+    const remove = new Set<string>([id]);
+    let grew = true;
+    while (grew) {
+      grew = false;
+      for (const a of all) {
+        if (a.parentId && remove.has(a.parentId) && !remove.has(a.id)) {
+          remove.add(a.id);
+          grew = true;
+        }
+      }
+    }
+    save(all.filter((a) => !remove.has(a.id)));
     this.emit();
   }
 

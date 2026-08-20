@@ -124,13 +124,8 @@ export async function updateAnnotation(
 export async function deleteAnnotation(id: string): Promise<void> {
   if (!isAnnotationsDbConfigured()) return fileDeleteAnnotation(id);
 
+  // FK on parent_id is ON DELETE CASCADE — removes nested replies.
   const db = getAnnotationsDb();
-  const { error: childError } = await db
-    .from("annotations")
-    .delete()
-    .eq("parent_id", id);
-  if (childError) throw childError;
-
   const { error } = await db.from("annotations").delete().eq("id", id);
   if (error) throw error;
 }

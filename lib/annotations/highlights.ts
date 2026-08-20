@@ -42,8 +42,9 @@ function wrapSegment(
 export function applyAnnotationHighlights(annotations: Annotation[]) {
   clearHighlights();
 
+  // Only root annotations get document highlights; replies nest in the sidebar.
   for (const annotation of annotations) {
-    if (annotation.resolvedAt) continue;
+    if (annotation.resolvedAt || annotation.parentId) continue;
     const section = document.querySelector<HTMLElement>(
       `[data-section-id="${annotation.sectionId}"]`,
     );

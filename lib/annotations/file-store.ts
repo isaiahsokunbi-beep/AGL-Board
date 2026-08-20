@@ -94,5 +94,16 @@ export async function fileUpdateAnnotation(
 
 export async function fileDeleteAnnotation(id: string): Promise<void> {
   const all = await readAll();
-  await writeAll(all.filter((a) => a.id !== id && a.parentId !== id));
+  const remove = new Set<string>([id]);
+  let grew = true;
+  while (grew) {
+    grew = false;
+    for (const a of all) {
+      if (a.parentId && remove.has(a.parentId) && !remove.has(a.id)) {
+        remove.add(a.id);
+        grew = true;
+      }
+    }
+  }
+  await writeAll(all.filter((a) => !remove.has(a.id)));
 }

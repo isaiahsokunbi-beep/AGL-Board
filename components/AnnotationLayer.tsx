@@ -14,7 +14,13 @@ import {
   clearHighlights,
 } from "@/lib/annotations/highlights";
 import { createAnnotationStore } from "@/lib/annotations/store";
-import type { Annotation } from "@/lib/annotations/types";
+import {
+  buildAnnotationThreads,
+  countThreadNodes,
+  findRootId,
+  type AnnotationThread,
+} from "@/lib/annotations/threads";
+import type { Annotation, AnnotationStore } from "@/lib/annotations/types";
 
 const AUTHOR_KEY = "agl-board-author";
 
@@ -58,6 +64,14 @@ function clampComposerPosition(x: number, y: number) {
   return { left, top };
 }
 
+function formatWhen(iso: string) {
+  try {
+    return new Date(iso).toLocaleString();
+  } catch {
+    return iso;
+  }
+}
+
 export function AnnotationLayer() {
   const [annotations, setAnnotations] = useState<Annotation[]>([]);
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -67,6 +81,8 @@ export function AnnotationLayer() {
   const [author, setAuthor] = useState("");
   const [liveMsg, setLiveMsg] = useState("");
   const [focusId, setFocusId] = useState<string | null>(null);
+  const [replyToId, setReplyToId] = useState<string | null>(null);
+  const [replyBody, setReplyBody] = useState("");
   const storeRef = useRef(createAnnotationStore());
   const debounceRef = useRef<number | null>(null);
 
@@ -115,7 +131,6 @@ export function AnnotationLayer() {
           setToolbar(null);
           return;
         }
-        // Measure offsets against plain text without marks for stable anchors
         const plain = section.el.textContent ?? "";
         const pre = range.cloneRange();
         pre.selectNodeContents(section.el);
@@ -141,9 +156,21 @@ export function AnnotationLayer() {
     return () => document.removeEventListener("selectionchange", onSelectionChange);
   }, [findSection, composer]);
 
-  const active = annotations
-    .filter((a) => !a.resolvedAt && a.docVersion === DOC_VERSION)
-    .sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
+  const versioned = annotations.filter((a) => a.docVersion === DOC_VERSION);
+  const resolvedRootIds = new Set(
+    versioned.filter((a) => Boolean(a.resolvedAt) && !a.parentId).map((a) => a.id),
+  );
+  const activeItems = versioned.filter((a) => {
+    const rootId = findRootId(versioned, a.id);
+    return !resolvedRootIds.has(rootId);
+  });
+  const resolvedItems = versioned.filter((a) => {
+    const rootId = findRootId(versioned, a.id);
+    return resolvedRootIds.has(rootId);
+  });
+  const activeThreads = buildAnnotationThreads(activeItems);
+  const activeCount = countThreadNodes(activeThreads);
+  const resolvedThreads = buildAnnotationThreads(resolvedItems);
 
   useEffect(() => {
     function onClick(e: MouseEvent) {
@@ -154,16 +181,34 @@ export function AnnotationLayer() {
       const id = mark.getAttribute("data-annotation-id");
       if (!id) return;
       setFocusId(id);
+      setReplyToId(null);
       setSidebarOpen(true);
       setLiveMsg("Opened annotation for highlighted text");
+      requestAnimationFrame(() => {
+        document.getElementById(`annotation-${id}`)?.scrollIntoView({
+          block: "nearest",
+          behavior: "smooth",
+        });
+      });
     }
     document.addEventListener("click", onClick);
     return () => document.removeEventListener("click", onClick);
   }, []);
 
+  useEffect(() => {
+    if (!focusId || !sidebarOpen) return;
+    requestAnimationFrame(() => {
+      document.getElementById(`annotation-${focusId}`)?.scrollIntoView({
+        block: "nearest",
+        behavior: "smooth",
+      });
+    });
+  }, [focusId, sidebarOpen, activeThreads]);
+
   function openComposer(target: SelectionTarget) {
     setComposer(target);
     setToolbar(null);
+    setReplyToId(null);
   }
 
   async function postComment() {
@@ -193,12 +238,35 @@ export function AnnotationLayer() {
     }
   }
 
+  async function postReply(parent: Annotation) {
+    if (!replyBody.trim() || !author.trim()) return;
+    localStorage.setItem(AUTHOR_KEY, author);
+    try {
+      const created = await storeRef.current.create({
+        sectionId: parent.sectionId,
+        anchor: parent.anchor,
+        body: replyBody.trim(),
+        authorName: author.trim(),
+        parentId: parent.id,
+      });
+      setReplyBody("");
+      setReplyToId(null);
+      setFocusId(created.id);
+      setSidebarOpen(true);
+      setLiveMsg(`Reply posted by ${author.trim()}`);
+    } catch (err) {
+      const message = err instanceof Error ? err.message : "Failed to post reply";
+      setLiveMsg(message);
+      window.alert(message);
+    }
+  }
+
   const ordered = [...annotations].sort(
     (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
   );
-  const resolved = ordered.filter((a) => a.resolvedAt);
   const orphaned = ordered.filter((a) => {
     if (a.docVersion !== DOC_VERSION) return true;
+    if (a.parentId) return false;
     const el = document.querySelector(`[data-section-id="${a.sectionId}"]`);
     if (!el) return true;
     return resolveAnchor(el.textContent ?? "", a.anchor).status === "orphaned";
@@ -288,7 +356,7 @@ export function AnnotationLayer() {
         className="no-print fixed right-4 top-4 z-40 rounded-md border border-comment-border bg-grays-white px-3 py-2 text-[12px] shadow-card"
         onClick={() => setSidebarOpen((v) => !v)}
       >
-        Comments ({active.length})
+        Comments ({activeCount})
       </button>
 
       {sidebarOpen && (
@@ -300,26 +368,93 @@ export function AnnotationLayer() {
             <h2 className="text-heading-subsection font-bold uppercase">Comments</h2>
             <CloseButton onClick={() => setSidebarOpen(false)} label="Close comments" />
           </div>
+
+          {!author.trim() && (
+            <div className="mb-4 rounded-md border border-border-default bg-surface-metric p-2">
+              <label htmlFor="sidebar-author" className="text-[11px] uppercase text-text-secondary">
+                Your name (for replies)
+              </label>
+              <input
+                id="sidebar-author"
+                value={author}
+                onChange={(e) => setAuthor(e.target.value)}
+                placeholder="Your name"
+                className="mt-1 w-full rounded border border-border-default p-2 text-[12px]"
+              />
+            </div>
+          )}
+
           <CommentGroup
             title="Active"
-            items={active}
+            threads={activeThreads}
             store={storeRef.current}
             focusId={focusId}
+            replyToId={replyToId}
+            replyBody={replyBody}
+            author={author}
+            onAuthorChange={setAuthor}
+            onReplyBodyChange={setReplyBody}
+            onStartReply={(id) => {
+              setReplyToId(id);
+              setReplyBody("");
+              setFocusId(id);
+            }}
+            onCancelReply={() => {
+              setReplyToId(null);
+              setReplyBody("");
+            }}
+            onPostReply={postReply}
+            emptyHint="No comments yet. Highlight text to annotate."
           />
-          {resolved.length > 0 && (
+
+          {resolvedThreads.length > 0 && (
             <details className="mt-4">
               <summary className="cursor-pointer text-[12px] text-text-secondary">
-                Resolved ({resolved.length})
+                Resolved ({countThreadNodes(resolvedThreads)})
               </summary>
-              <CommentGroup title="" items={resolved} store={storeRef.current} dimmed />
+              <CommentGroup
+                title=""
+                threads={resolvedThreads}
+                store={storeRef.current}
+                dimmed
+                focusId={focusId}
+                replyToId={null}
+                replyBody=""
+                author={author}
+                onAuthorChange={setAuthor}
+                onReplyBodyChange={() => undefined}
+                onStartReply={() => undefined}
+                onCancelReply={() => undefined}
+                onPostReply={async () => undefined}
+              />
             </details>
           )}
+
           {orphaned.length > 0 && (
             <div className="mt-4">
               <h3 className="text-[12px] font-semibold uppercase text-variance-unfavourable">
                 Unanchored
               </h3>
-              <CommentGroup title="" items={orphaned} store={storeRef.current} />
+              <CommentGroup
+                title=""
+                threads={buildAnnotationThreads(orphaned)}
+                store={storeRef.current}
+                focusId={focusId}
+                replyToId={replyToId}
+                replyBody={replyBody}
+                author={author}
+                onAuthorChange={setAuthor}
+                onReplyBodyChange={setReplyBody}
+                onStartReply={(id) => {
+                  setReplyToId(id);
+                  setReplyBody("");
+                }}
+                onCancelReply={() => {
+                  setReplyToId(null);
+                  setReplyBody("");
+                }}
+                onPostReply={postReply}
+              />
             </div>
           )}
         </aside>
@@ -380,60 +515,218 @@ function SelectionToolbar({
 
 function CommentGroup({
   title,
-  items,
+  threads,
   store,
   dimmed,
   focusId,
+  replyToId,
+  replyBody,
+  author,
+  onAuthorChange,
+  onReplyBodyChange,
+  onStartReply,
+  onCancelReply,
+  onPostReply,
+  emptyHint,
 }: {
   title: string;
-  items: Annotation[];
-  store: ReturnType<typeof createAnnotationStore>;
+  threads: AnnotationThread[];
+  store: AnnotationStore;
   dimmed?: boolean;
   focusId?: string | null;
+  replyToId: string | null;
+  replyBody: string;
+  author: string;
+  onAuthorChange: (v: string) => void;
+  onReplyBodyChange: (v: string) => void;
+  onStartReply: (id: string) => void;
+  onCancelReply: () => void;
+  onPostReply: (parent: Annotation) => Promise<void>;
+  emptyHint?: string;
 }) {
   return (
     <div className="mt-2 space-y-3">
       {title && <h3 className="text-[11px] uppercase text-text-secondary">{title}</h3>}
-      {items.length === 0 && title && (
-        <p className="text-[12px] text-text-secondary">No comments yet. Highlight text to annotate.</p>
+      {threads.length === 0 && emptyHint && (
+        <p className="text-[12px] text-text-secondary">{emptyHint}</p>
       )}
-      {items.map((a) => (
-        <article
-          key={a.id}
-          id={`annotation-${a.id}`}
-          className={`rounded border p-2 text-[12px] ${
-            focusId === a.id
-              ? "border-comment-marker bg-highlight-fill ring-1 ring-comment-marker/40"
-              : "border-comment-border"
-          } ${dimmed ? "opacity-60" : ""}`}
-        >
+      {threads.map((thread) => (
+        <ThreadCard
+          key={thread.annotation.id}
+          thread={thread}
+          depth={0}
+          store={store}
+          dimmed={dimmed}
+          focusId={focusId}
+          replyToId={replyToId}
+          replyBody={replyBody}
+          author={author}
+          onAuthorChange={onAuthorChange}
+          onReplyBodyChange={onReplyBodyChange}
+          onStartReply={onStartReply}
+          onCancelReply={onCancelReply}
+          onPostReply={onPostReply}
+          showQuote
+        />
+      ))}
+    </div>
+  );
+}
+
+function ThreadCard({
+  thread,
+  depth,
+  store,
+  dimmed,
+  focusId,
+  replyToId,
+  replyBody,
+  author,
+  onAuthorChange,
+  onReplyBodyChange,
+  onStartReply,
+  onCancelReply,
+  onPostReply,
+  showQuote,
+}: {
+  thread: AnnotationThread;
+  depth: number;
+  store: AnnotationStore;
+  dimmed?: boolean;
+  focusId?: string | null;
+  replyToId: string | null;
+  replyBody: string;
+  author: string;
+  onAuthorChange: (v: string) => void;
+  onReplyBodyChange: (v: string) => void;
+  onStartReply: (id: string) => void;
+  onCancelReply: () => void;
+  onPostReply: (parent: Annotation) => Promise<void>;
+  showQuote: boolean;
+}) {
+  const a = thread.annotation;
+  const isFocused = focusId === a.id;
+  const isReplying = replyToId === a.id;
+  const canReply = !dimmed && !a.resolvedAt;
+  const maxDepth = 4;
+  const nestClass = depth > 0 ? "ml-3 border-l-2 border-comment-marker/30 pl-3" : "";
+
+  return (
+    <div className={nestClass}>
+      <article
+        id={`annotation-${a.id}`}
+        className={`rounded border p-2 text-[12px] ${
+          isFocused
+            ? "border-comment-marker bg-highlight-fill ring-1 ring-comment-marker/40"
+            : "border-comment-border"
+        } ${dimmed ? "opacity-60" : ""}`}
+      >
+        {showQuote && (
           <blockquote className="border-l-2 border-comment-marker pl-2 italic text-text-secondary">
             {a.anchor.exact}
           </blockquote>
-          <p className="mt-2">{a.body}</p>
-          <p className="mt-1 text-[10px] text-text-secondary">
-            {a.authorName} · {new Date(a.createdAt).toLocaleString()}
+        )}
+        {depth > 0 && (
+          <p className="text-[10px] font-semibold uppercase tracking-wide text-comment-marker">
+            Reply
           </p>
-          <div className="mt-2 flex gap-2">
-            {!a.resolvedAt && (
-              <button
-                type="button"
-                className="text-comment-marker"
-                onClick={() => store.update(a.id, { resolvedAt: new Date().toISOString() })}
-              >
-                Resolve
-              </button>
-            )}
+        )}
+        <p className={`${showQuote || depth > 0 ? "mt-2" : ""}`}>{a.body}</p>
+        <p className="mt-1 text-[10px] text-text-secondary">
+          {a.authorName} · {formatWhen(a.createdAt)}
+        </p>
+        <div className="mt-2 flex flex-wrap gap-3">
+          {canReply && depth < maxDepth && (
             <button
               type="button"
-              className="text-variance-unfavourable"
-              onClick={() => store.delete(a.id)}
+              className="text-comment-marker"
+              onClick={() => onStartReply(a.id)}
             >
-              Delete
+              Reply
             </button>
+          )}
+          {!a.resolvedAt && !a.parentId && (
+            <button
+              type="button"
+              className="text-comment-marker"
+              onClick={() => store.update(a.id, { resolvedAt: new Date().toISOString() })}
+            >
+              Resolve thread
+            </button>
+          )}
+          <button
+            type="button"
+            className="text-variance-unfavourable"
+            onClick={() => store.delete(a.id)}
+          >
+            Delete{thread.replies.length > 0 ? " thread" : ""}
+          </button>
+        </div>
+
+        {isReplying && (
+          <div className="mt-3 rounded-md border border-comment-border bg-surface-metric p-2">
+            <p className="text-[10px] uppercase text-text-secondary">
+              Replying to {a.authorName}
+            </p>
+            <textarea
+              value={replyBody}
+              onChange={(e) => onReplyBodyChange(e.target.value)}
+              placeholder="Write a reply…"
+              className="mt-1 w-full rounded border border-border-default p-2 text-[12px]"
+              rows={2}
+              autoFocus
+            />
+            {!author.trim() && (
+              <input
+                value={author}
+                onChange={(e) => onAuthorChange(e.target.value)}
+                placeholder="Your name"
+                className="mt-2 w-full rounded border border-border-default p-2 text-[12px]"
+              />
+            )}
+            <div className="mt-2 flex gap-2">
+              <button
+                type="button"
+                className="rounded bg-text-primary px-2.5 py-1 text-[11px] text-grays-white"
+                onClick={() => void onPostReply(a)}
+              >
+                Post reply
+              </button>
+              <button
+                type="button"
+                className="rounded border px-2.5 py-1 text-[11px]"
+                onClick={onCancelReply}
+              >
+                Cancel
+              </button>
+            </div>
           </div>
-        </article>
-      ))}
+        )}
+      </article>
+
+      {thread.replies.length > 0 && (
+        <div className="mt-2 space-y-2">
+          {thread.replies.map((child) => (
+            <ThreadCard
+              key={child.annotation.id}
+              thread={child}
+              depth={depth + 1}
+              store={store}
+              dimmed={dimmed}
+              focusId={focusId}
+              replyToId={replyToId}
+              replyBody={replyBody}
+              author={author}
+              onAuthorChange={onAuthorChange}
+              onReplyBodyChange={onReplyBodyChange}
+              onStartReply={onStartReply}
+              onCancelReply={onCancelReply}
+              onPostReply={onPostReply}
+              showQuote={false}
+            />
+          ))}
+        </div>
+      )}
     </div>
   );
 }

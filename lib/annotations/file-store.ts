@@ -3,21 +3,42 @@ import path from "path";
 import { DOC_VERSION } from "@/content/board-paper";
 import type { Annotation, CreateAnnotationInput } from "./types";
 
-const DATA_DIR = path.join(process.cwd(), "data");
-const DATA_FILE = path.join(DATA_DIR, "annotations.json");
+function isServerlessRuntime() {
+  return Boolean(
+    process.env.VERCEL ||
+      process.env.AWS_LAMBDA_FUNCTION_NAME ||
+      process.env.ANNOTATIONS_USE_TMP === "1",
+  );
+}
+
+/** Writable dir: project `data/` locally, `/tmp` on Vercel/Lambda. */
+export function getAnnotationsDataDir(): string {
+  if (process.env.ANNOTATIONS_DATA_DIR) return process.env.ANNOTATIONS_DATA_DIR;
+  if (isServerlessRuntime()) return path.join("/tmp", "agl-board-annotations");
+  return path.join(process.cwd(), "data");
+}
+
+export function isEphemeralAnnotationsBackend(): boolean {
+  return !process.env.ANNOTATIONS_DATA_DIR && isServerlessRuntime();
+}
+
+function dataFile(): string {
+  return path.join(getAnnotationsDataDir(), "annotations.json");
+}
 
 async function ensureFile(): Promise<void> {
-  await fs.mkdir(DATA_DIR, { recursive: true });
+  const dir = getAnnotationsDataDir();
+  await fs.mkdir(dir, { recursive: true });
   try {
-    await fs.access(DATA_FILE);
+    await fs.access(dataFile());
   } catch {
-    await fs.writeFile(DATA_FILE, "[]", "utf8");
+    await fs.writeFile(dataFile(), "[]", "utf8");
   }
 }
 
 async function readAll(): Promise<Annotation[]> {
   await ensureFile();
-  const raw = await fs.readFile(DATA_FILE, "utf8");
+  const raw = await fs.readFile(dataFile(), "utf8");
   try {
     return JSON.parse(raw) as Annotation[];
   } catch {
@@ -27,7 +48,7 @@ async function readAll(): Promise<Annotation[]> {
 
 async function writeAll(annotations: Annotation[]): Promise<void> {
   await ensureFile();
-  await fs.writeFile(DATA_FILE, JSON.stringify(annotations, null, 2), "utf8");
+  await fs.writeFile(dataFile(), JSON.stringify(annotations, null, 2), "utf8");
 }
 
 export async function fileListAnnotations(): Promise<Annotation[]> {

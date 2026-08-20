@@ -36,7 +36,7 @@ With `NEXT_PUBLIC_ANNOTATION_STORE=api`, comments go through session-gated route
 - `GET/POST /api/annotations`
 - `PATCH/DELETE /api/annotations/[id]`
 
-**Without Supabase**, the API stores comments in `data/annotations.json` on the server (shared for everyone using that same running instance).
+**Without Supabase**, the API stores comments in `data/annotations.json` locally. On Vercel/Lambda it uses `/tmp` (writable but **ephemeral** and not shared across instances) — configure Supabase for durable shared comments in production.
 
 **With Supabase** (recommended for production / multi-host):
 

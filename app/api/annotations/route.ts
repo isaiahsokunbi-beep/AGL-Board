@@ -5,7 +5,14 @@ import {
   isAnnotationsDbConfigured,
   listAnnotations,
 } from "@/lib/annotations/db";
+import { isEphemeralAnnotationsBackend } from "@/lib/annotations/file-store";
 import type { CreateAnnotationInput } from "@/lib/annotations/types";
+
+function backendLabel() {
+  if (isAnnotationsDbConfigured()) return "supabase";
+  if (isEphemeralAnnotationsBackend()) return "ephemeral";
+  return "file";
+}
 
 export async function GET() {
   if (!(await isAuthenticated())) {
@@ -16,7 +23,7 @@ export async function GET() {
     const annotations = await listAnnotations();
     return NextResponse.json({
       annotations,
-      backend: isAnnotationsDbConfigured() ? "supabase" : "file",
+      backend: backendLabel(),
     });
   } catch (err) {
     const message = err instanceof Error ? err.message : "Failed to list annotations";
@@ -44,7 +51,7 @@ export async function POST(request: Request) {
     return NextResponse.json(
       {
         annotation,
-        backend: isAnnotationsDbConfigured() ? "supabase" : "file",
+        backend: backendLabel(),
       },
       { status: 201 },
     );

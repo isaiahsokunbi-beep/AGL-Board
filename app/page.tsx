@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import "@/styles/globals.css";
 import { getViewerName } from "@/lib/auth/session";
 import { DocumentShell } from "@/components/DocumentShell";
 

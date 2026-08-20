@@ -16,7 +16,7 @@ export function GateForm() {
           name="viewerName"
           required
           autoComplete="name"
-          className="mt-1.5 w-full rounded-lg border border-border-default bg-surface-page px-3 py-2.5 text-body transition-colors focus:border-brand-green focus:outline-none focus:ring-2 focus:ring-brand-green/20"
+          className="mt-1.5 w-full rounded-lg border border-border-default bg-surface-metric px-3 py-2.5 text-body transition-colors focus:border-brand-orange focus:outline-none focus:ring-2 focus:ring-brand-orange/25"
         />
       </div>
       <div>
@@ -29,7 +29,7 @@ export function GateForm() {
           type="password"
           required
           autoComplete="current-password"
-          className="mt-1.5 w-full rounded-lg border border-border-default bg-surface-page px-3 py-2.5 text-body transition-colors focus:border-brand-green focus:outline-none focus:ring-2 focus:ring-brand-green/20"
+          className="mt-1.5 w-full rounded-lg border border-border-default bg-surface-metric px-3 py-2.5 text-body transition-colors focus:border-brand-orange focus:outline-none focus:ring-2 focus:ring-brand-orange/25"
         />
       </div>
       {error && (
@@ -39,7 +39,7 @@ export function GateForm() {
       )}
       <button
         type="submit"
-        className="w-full rounded-lg bg-brand-green px-4 py-3 text-body font-semibold text-white transition-opacity hover:opacity-90"
+        className="w-full rounded-lg bg-brand-green px-4 py-3 text-body font-semibold text-white shadow-card transition-opacity hover:opacity-90"
       >
         View board paper
       </button>

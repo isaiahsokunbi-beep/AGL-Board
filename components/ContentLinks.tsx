@@ -31,22 +31,22 @@ export function splitUrls(text: string): { type: "text" | "url"; value: string }
   return parts.length > 0 ? parts : [{ type: "text", value: text }];
 }
 
-export function ContentLink({ href }: { href: string }) {
-  let label = href;
-  try {
-    const u = new URL(href);
-    label = u.hostname.replace(/^www\./, "") + (u.pathname === "/" ? "" : u.pathname);
-    if (label.length > 48) label = `${label.slice(0, 45)}…`;
-  } catch {
-    /* keep raw */
-  }
+export function ContentLink({
+  href,
+  children,
+}: {
+  href: string;
+  children?: ReactNode;
+}) {
+  const label = children ?? "Click the link to view the content";
 
   return (
     <a
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      className="break-all font-medium text-link underline decoration-link/30 underline-offset-2 transition-colors hover:decoration-link"
+      title={href}
+      className="font-medium text-link underline decoration-link/30 underline-offset-2 transition-colors hover:decoration-link"
     >
       {label}
     </a>
@@ -59,6 +59,10 @@ export function withAutoLinks(
   renderText: (segment: string, key: number) => ReactNode,
 ): ReactNode[] {
   return splitUrls(text).map((part, i) =>
-    part.type === "url" ? <ContentLink key={`u-${i}`} href={part.value} /> : renderText(part.value, i),
+    part.type === "url" ? (
+      <ContentLink key={`u-${i}`} href={part.value} />
+    ) : (
+      renderText(part.value, i)
+    ),
   );
 }

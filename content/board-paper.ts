@@ -426,7 +426,7 @@ export const sections: Section[] = [
         id: "ghana-expansion",
         title: "Ghana Expansion",
         paragraphs: [
-          "A shea butter pilot linking Ghana to the EU market is already operational through a live joint venture. H2 2026 work focuses on establishing in Ghana: scoping the opportunity and identifying potential internal or external partners, alongside standing up a field and sales team and hiring a Ghana Operations Manager. (Planning spreadsheet: https://docs.google.com/spreadsheets/d/1VR08Pjl6Y0GL1MkCIEYJeh9PyAqibsTWmIT_JX89l60/edit?usp=sharing)",
+          "A shea butter pilot linking Ghana to the EU market is already operational through a live joint venture. H2 2026 work focuses on establishing in Ghana: scoping the opportunity and identifying potential internal or external partners, alongside standing up a field and sales team and hiring a Ghana Operations Manager. Planning spreadsheet: https://docs.google.com/spreadsheets/d/1VR08Pjl6Y0GL1MkCIEYJeh9PyAqibsTWmIT_JX89l60/edit?usp=sharing",
         ],
       },
       {
@@ -461,7 +461,7 @@ export const sections: Section[] = [
         title: "Fundraise Strategy",
         paragraphs: [
           "We will commence an equity raise to support our debt need, hire, market, expand to Ghana, expand exports to the EU markets and begin initial logistics infrastructure build out.",
-          "Also our future fundraise strategy is attached (https://docs.google.com/document/d/1pCxoe400BOuoiH4GL0JsqpMUwTu8Oa0KQxHgLpcrDT0/edit?usp=sharing).",
+          "Also our future fundraise strategy is attached. https://docs.google.com/document/d/1pCxoe400BOuoiH4GL0JsqpMUwTu8Oa0KQxHgLpcrDT0/edit?usp=sharing",
         ],
       },
     ],

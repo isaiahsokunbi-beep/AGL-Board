@@ -102,13 +102,9 @@ export function MetricCardView({ card }: { card: MetricCardType }) {
         <span className="min-w-0 text-xs font-medium text-text-secondary">
           {card.label}
         </span>
-        {tone && (
-          <span
-            className={`shrink-0 text-[10px] font-bold uppercase tracking-wide ${
-              tone === "win" ? "text-variance-favourable" : "text-variance-unfavourable"
-            }`}
-          >
-            {tone === "win" ? "↑ Win" : "↓ Gap"}
+        {tone === "loss" && (
+          <span className="shrink-0 text-[10px] font-bold uppercase tracking-wide text-variance-unfavourable">
+            ↓ Gap
           </span>
         )}
       </div>

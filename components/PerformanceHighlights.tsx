@@ -17,7 +17,7 @@ export function PerformanceHighlights({ items }: { items: PerformanceHighlight[]
                 isWin ? "text-variance-favourable" : "text-variance-unfavourable"
               }`}
             >
-              {isWin ? "↑ Win" : "↓ Gap"} · {item.label}
+              {isWin ? item.label : `↓ Gap · ${item.label}`}
             </p>
             <p className="mt-1 text-sm leading-snug text-text-primary">{item.detail}</p>
           </div>

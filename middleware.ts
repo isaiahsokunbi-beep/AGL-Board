@@ -41,7 +41,12 @@ export function middleware(request: NextRequest) {
     }
 
     const accept = request.headers.get("accept") ?? "";
-    if (!accept.includes("text/html") && !pathname.startsWith("/api/")) {
+    const isDownloadAsset = pathname.startsWith("/downloads/");
+    if (
+      !accept.includes("text/html") &&
+      !pathname.startsWith("/api/") &&
+      !isDownloadAsset
+    ) {
       return new NextResponse("Forbidden", { status: 403 });
     }
 

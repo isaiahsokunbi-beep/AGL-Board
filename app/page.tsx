@@ -15,7 +15,12 @@ export const metadata: Metadata = {
   referrer: "no-referrer",
 };
 
-export default async function HomePage() {
+export default async function HomePage({
+  searchParams,
+}: {
+  searchParams: Promise<{ pdf?: string }>;
+}) {
   const viewerName = await getViewerName();
-  return <DocumentShell viewerName={viewerName} />;
+  const { pdf } = await searchParams;
+  return <DocumentShell viewerName={viewerName} pdfMode={pdf === "1"} />;
 }

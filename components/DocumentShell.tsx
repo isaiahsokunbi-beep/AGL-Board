@@ -10,7 +10,14 @@ import { ReadingProgress } from "./ReadingProgress";
 import { SectionBlock } from "./SectionBlock";
 import { TableOfContents } from "./TableOfContents";
 
-export function DocumentShell({ viewerName }: { viewerName: string | null }) {
+export function DocumentShell({
+  viewerName,
+  pdfMode = false,
+}: {
+  viewerName: string | null;
+  /** Lean render for server-side PDF (no annotations / floating chrome) */
+  pdfMode?: boolean;
+}) {
   const { cover, sections } = boardPaper;
   const [stamp, setStamp] = useState("");
   const tocEntries = [
@@ -32,7 +39,7 @@ export function DocumentShell({ viewerName }: { viewerName: string | null }) {
 
   return (
     <>
-      <ReadingProgress />
+      {!pdfMode && <ReadingProgress />}
       <div
         className="watermark pointer-events-none fixed inset-0 z-0 overflow-hidden print:opacity-[0.08]"
         aria-hidden
@@ -52,7 +59,7 @@ export function DocumentShell({ viewerName }: { viewerName: string | null }) {
 
       <div className="relative z-10 mx-auto max-w-6xl px-page-x py-6 sm:py-8">
         <div className="flex flex-col gap-8 lg:flex-row lg:items-start lg:gap-10">
-          <TableOfContents entries={tocEntries} />
+          {!pdfMode && <TableOfContents entries={tocEntries} />}
           <article data-annotatable className="min-w-0 flex-1 lg:max-w-[52rem]">
             <CoverBlock cover={cover} />
             <div data-progress-start aria-hidden />
@@ -66,9 +73,13 @@ export function DocumentShell({ viewerName }: { viewerName: string | null }) {
         </div>
       </div>
 
-      <PeriodSwitcher />
-      <DownloadReportButton />
-      <AnnotationLayer />
+      {!pdfMode && (
+        <>
+          <PeriodSwitcher />
+          <DownloadReportButton />
+          <AnnotationLayer />
+        </>
+      )}
 
       <a href="/do-not-follow" className="sr-only" aria-hidden tabIndex={-1}>
         do not follow

@@ -7,8 +7,7 @@ export const dynamic = "force-dynamic";
 export const maxDuration = 60;
 
 const FILE_NAME = "Agriarche-H1-2026-Board-Paper.pdf";
-/** UA allowed through middleware crawler block for authenticated PDF renders */
-export const PDF_RENDER_UA = "AGL-Board-PDF/1.0";
+const PDF_RENDER_UA = "AGL-Board-PDF/1.0";
 
 export async function GET(request: Request) {
   if (!(await isAuthenticated())) {
@@ -17,6 +16,7 @@ export async function GET(request: Request) {
 
   const cookie = request.headers.get("cookie") ?? "";
   const origin = new URL(request.url).origin;
+  // pdf=1 skips annotations / chrome so network can settle
   const target = `${origin}/?pdf=1`;
 
   let browser: Awaited<ReturnType<typeof launchPdfBrowser>> | null = null;
@@ -24,6 +24,9 @@ export async function GET(request: Request) {
   try {
     browser = await launchPdfBrowser();
     const page = await browser.newPage();
+
+    page.setDefaultTimeout(60_000);
+    page.setDefaultNavigationTimeout(60_000);
 
     await page.setUserAgent(
       `${PDF_RENDER_UA} Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36`,
@@ -33,28 +36,46 @@ export async function GET(request: Request) {
       Cookie: cookie,
     });
 
+    // Avoid networkidle0 — annotations / analytics can keep the network busy forever
     await page.goto(target, {
-      waitUntil: "networkidle0",
-      timeout: 45_000,
+      waitUntil: "domcontentloaded",
+      timeout: 60_000,
     });
 
-    // Wait for hero + gallery images to decode
-    await page.evaluate(async () => {
-      const imgs = Array.from(document.images);
-      await Promise.all(
-        imgs.map((img) =>
-          img.complete
-            ? Promise.resolve()
-            : new Promise<void>((resolve) => {
-                img.addEventListener("load", () => resolve(), { once: true });
-                img.addEventListener("error", () => resolve(), { once: true });
-              }),
-        ),
-      );
-    });
+    await page.waitForSelector("article[data-annotatable]", { timeout: 30_000 });
 
-    // Hide chrome only — keep screen layout/charts (closer to the live webpage
-    // than @media print, which swaps charts for tables).
+    // Soft wait for images (capped) — never block the CDP session indefinitely
+    await page
+      .evaluate(async () => {
+        const deadline = Date.now() + 12_000;
+        const imgs = Array.from(document.images);
+
+        await Promise.race([
+          Promise.all(
+            imgs.map(
+              (img) =>
+                new Promise<void>((resolve) => {
+                  if (img.complete) {
+                    resolve();
+                    return;
+                  }
+                  const done = () => resolve();
+                  img.addEventListener("load", done, { once: true });
+                  img.addEventListener("error", done, { once: true });
+                }),
+            ),
+          ),
+          new Promise<void>((resolve) => {
+            const ms = Math.max(0, deadline - Date.now());
+            setTimeout(resolve, ms);
+          }),
+        ]);
+
+        // Brief settle for layout / fonts
+        await new Promise((r) => setTimeout(r, 400));
+      })
+      .catch(() => undefined);
+
     await page.addStyleTag({
       content: `
         .no-print,
@@ -79,6 +100,7 @@ export async function GET(request: Request) {
       printBackground: true,
       margin: { top: "10mm", right: "10mm", bottom: "10mm", left: "10mm" },
       preferCSSPageSize: false,
+      timeout: 120_000,
     });
 
     return new NextResponse(Buffer.from(pdf), {

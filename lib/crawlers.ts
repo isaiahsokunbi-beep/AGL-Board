@@ -28,6 +28,8 @@ export const CRAWLER_BLOCKLIST: readonly string[] = [
 
 export function isBlockedUserAgent(userAgent: string | null): boolean {
   if (!userAgent) return true;
+  // Authenticated server-side PDF renderer
+  if (userAgent.includes("AGL-Board-PDF/")) return false;
   const ua = userAgent.toLowerCase();
   return CRAWLER_BLOCKLIST.some((bot) => ua.includes(bot.toLowerCase()));
 }

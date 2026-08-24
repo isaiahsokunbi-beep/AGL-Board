@@ -8,21 +8,62 @@
     display: none !important;
   }
 
+  @page {
+    size: A4;
+    margin: 12mm 14mm;
+  }
+
+  html,
   body {
     background: white !important;
-    color: black !important;
-    font-size: 11pt;
+    color: #1a1a1a !important;
+    font-size: 10.5pt;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  .relative.z-10 {
+    max-width: none !important;
+    padding: 0 !important;
+  }
+
+  article {
+    max-width: none !important;
+    width: 100% !important;
   }
 
   .watermark {
-    opacity: 0.08 !important;
+    opacity: 0.06 !important;
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
   }
 
+  /* Preserve webpage metric / variance colours in the PDF */
+  .text-variance-favourable,
+  .text-brand-green {
+    color: #1f7a3f !important;
+  }
+
+  .text-variance-unfavourable {
+    color: #c0392b !important;
+  }
+
+  .text-brand-orange {
+    color: #e67e22 !important;
+  }
+
+  .bg-surface-card,
+  .bg-surface-metric,
+  .section-card {
+    background: #fff !important;
+    border-color: #e5e5e5 !important;
+  }
+
   table,
   tr,
-  .metric-row {
+  .metric-row,
+  .section-card,
+  header#cover {
     break-inside: avoid;
     page-break-inside: avoid;
   }
@@ -41,6 +82,10 @@
 
   * {
     box-shadow: none !important;
+  }
+
+  a[href^="http"]::after {
+    content: none;
   }
 
   mark[data-highlight] {

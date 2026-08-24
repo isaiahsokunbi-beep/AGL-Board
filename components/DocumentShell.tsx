@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { boardPaper } from "@/content/board-paper";
 import { AnnotationLayer } from "./AnnotationLayer";
 import { CoverBlock } from "./CoverBlock";
+import { DownloadReportButton } from "./DownloadReportButton";
 import { PeriodSwitcher } from "./PeriodSwitcher";
 import { ReadingProgress } from "./ReadingProgress";
 import { SectionBlock } from "./SectionBlock";
@@ -66,6 +67,7 @@ export function DocumentShell({ viewerName }: { viewerName: string | null }) {
       </div>
 
       <PeriodSwitcher />
+      <DownloadReportButton />
       <AnnotationLayer />
 
       <a href="/do-not-follow" className="sr-only" aria-hidden tabIndex={-1}>

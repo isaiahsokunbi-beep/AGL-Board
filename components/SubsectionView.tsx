@@ -25,7 +25,17 @@ export function SubsectionView({ subsection }: { subsection: Subsection }) {
         <PerformanceHighlights items={subsection.highlights} />
       )}
       {subsection.metricCards && (
-        <div className="metric-row mt-4 grid grid-cols-1 gap-metric-gap sm:grid-cols-2 lg:grid-cols-4">
+        <div
+          className={`metric-row mt-4 grid grid-cols-1 gap-metric-gap ${
+            subsection.metricCards.length === 1
+              ? "sm:max-w-xs"
+              : subsection.metricCards.length === 2
+                ? "sm:grid-cols-2"
+                : subsection.metricCards.length === 3
+                  ? "sm:grid-cols-2 lg:grid-cols-3"
+                  : "sm:grid-cols-2 lg:grid-cols-4"
+          }`}
+        >
           {subsection.metricCards.map((c) => (
             <MetricCardView key={c.label} card={c} />
           ))}

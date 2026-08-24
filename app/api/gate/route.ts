@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
+import { recordAccess } from "@/lib/access/store";
 import { setSession, verifyPassphrase } from "@/lib/auth/session";
+import { clientIp } from "@/lib/rate-limit";
 
 export async function POST(request: Request) {
   const form = await request.formData();
@@ -15,5 +17,17 @@ export async function POST(request: Request) {
   }
 
   await setSession(viewerName);
+
+  try {
+    await recordAccess({
+      viewerName,
+      ip: clientIp(request),
+      userAgent: request.headers.get("user-agent"),
+      path: "/",
+    });
+  } catch (err) {
+    console.error("Failed to record access event", err);
+  }
+
   return NextResponse.redirect(new URL("/", request.url));
 }

@@ -9,6 +9,35 @@ function parseNumeric(value: string): number | null {
   return Number.isFinite(n) ? n : null;
 }
 
+/** Rebuild display from the original template so ₦1,389,070,341 and ₦3.8B stay correct. */
+function formatAnimatedValue(template: string, current: number): string {
+  const match = template.match(/^(.*?)([+-]?)(\d[\d,]*(?:\.\d+)?)(.*)$/);
+  if (!match) return template;
+
+  const [, prefix, sign, numberPart, suffix] = match;
+  const decimalDigits = numberPart.includes(".")
+    ? (numberPart.split(".")[1]?.length ?? 0)
+    : 0;
+  const useGrouping = numberPart.includes(",");
+
+  let body: string;
+  if (decimalDigits > 0) {
+    const fixed = current.toFixed(decimalDigits);
+    body = useGrouping
+      ? Number(fixed).toLocaleString("en-US", {
+          minimumFractionDigits: decimalDigits,
+          maximumFractionDigits: decimalDigits,
+        })
+      : fixed;
+  } else if (useGrouping) {
+    body = Math.round(current).toLocaleString("en-US");
+  } else {
+    body = String(Math.round(current));
+  }
+
+  return `${prefix}${sign}${body}${suffix}`;
+}
+
 function toneFromCard(card: MetricCardType): "win" | "loss" | null {
   if (card.tone) return card.tone;
   if (card.negative) return "loss";
@@ -43,15 +72,9 @@ export function MetricCardView({ card }: { card: MetricCardType }) {
           const t = Math.min(1, (now - start) / duration);
           const eased = 1 - (1 - t) ** 3;
           const current = target * eased;
-          const formatted = card.value.includes("₦")
-            ? `₦${current.toFixed(1)}M`
-            : card.value.includes("%")
-              ? `${current.toFixed(1)}%`
-              : card.value.includes("MT")
-                ? `${current.toFixed(1)} MT`
-                : String(Math.round(current));
-          setDisplay(formatted);
+          setDisplay(formatAnimatedValue(card.value, current));
           if (t < 1) requestAnimationFrame(tick);
+          else setDisplay(card.value);
         }
 
         requestAnimationFrame(tick);
@@ -73,10 +96,12 @@ export function MetricCardView({ card }: { card: MetricCardType }) {
   return (
     <div
       ref={ref}
-      className="group flex flex-col rounded-lg border border-border-default bg-surface-metric p-4 transition-shadow hover:shadow-card-hover"
+      className="group flex min-w-0 flex-col rounded-lg border border-border-default bg-surface-metric p-4 transition-shadow hover:shadow-card-hover"
     >
       <div className="flex items-start justify-between gap-2">
-        <span className="text-xs font-medium text-text-secondary">{card.label}</span>
+        <span className="min-w-0 text-xs font-medium text-text-secondary">
+          {card.label}
+        </span>
         {tone && (
           <span
             className={`shrink-0 text-[10px] font-bold uppercase tracking-wide ${
@@ -87,7 +112,9 @@ export function MetricCardView({ card }: { card: MetricCardType }) {
           </span>
         )}
       </div>
-      <span className={`tabular-nums mt-1 text-value-metric font-bold ${valueClass}`}>
+      <span
+        className={`tabular-nums mt-1 break-words text-[clamp(1.05rem,2.8vw,1.5rem)] font-bold leading-tight ${valueClass}`}
+      >
         {display ?? card.value}
       </span>
       {card.subtitle && (

@@ -75,6 +75,8 @@ export type GalleryImage = {
   src: string;
   alt: string;
   caption?: string;
+  /** Thumbnail fit — diagrams should use contain */
+  fit?: "cover" | "contain";
 };
 
 export type PhotoGallery = {
@@ -833,14 +835,26 @@ export const sections: Section[] = [
       {
         id: "agl-strategy-snapshot",
         title: "AGL Strategy Snapshot",
+        gallery: {
+          title: "Commodity Backed Bank",
+          images: [
+            {
+              src: "/images/strategy/commodity-backed-bank.png",
+              alt: "Commodity Backed Bank ecosystem diagram showing Agriarche at the centre with farmers, input providers, investors, processors, retailers, and logistics",
+              caption:
+                "Commodity Backed Bank — ecosystem map of cash, inputs, produce, and returns across the Agriarche platform",
+              fit: "contain",
+            },
+          ],
+        },
         lists: [
           {
             items: [
               "Execution stage - Trading for local and international markets set up and running. Scale needed for expansion of centres, increase in buyers, working capital injection and tech upgrade to shift to a supply led model to accommodate other value chains. Process currently tightened and stress tested.",
-          "Manual execution of input credit scheme with automation underway in H2 defining all credit rules for farmers and agents.",
-          "Institutional investors locked in with an outlook of involving HNIs and individuals through structured finance programs - dependent on MFB and platform readiness for investor clarity",
-          "To deal with more structured Input processors as opposed to agrodealers yet to determine benefit to avoid creating a competition scenario on the field.",
-          "Restructure Retail segment for scale and impact by employing its focus leader",
+              "Manual execution of input credit scheme with automation underway in H2 defining all credit rules for farmers and agents.",
+              "Institutional investors locked in with an outlook of involving HNIs and individuals through structured finance programs - dependent on MFB and platform readiness for investor clarity",
+              "To deal with more structured Input processors as opposed to agrodealers yet to determine benefit to avoid creating a competition scenario on the field.",
+              "Restructure Retail segment for scale and impact by employing its focus leader",
             ],
           },
         ],

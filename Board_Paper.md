@@ -205,7 +205,7 @@ Furthermore, the fintech part of the platform is currently building out and woul
 
 # **7\. ESP Progress**
 
-ESP (Mastercard Foundation) is providing technical assistance across three verticals. Given this work is already embedded in day-to-day operational efficiency, it is tracked here as a standing progress grid rather than as a separate Control Tower session.
+ESP (Mastercard Foundation) is providing technical assistance across multiple verticals. Given this work is already embedded in day-to-day operational efficiency, it is tracked here as a standing progress grid rather than as a separate Control Tower session.
 
 | Vertical | TA Focus | Status |
 | :---- | :---- | :---- |
@@ -213,7 +213,8 @@ ESP (Mastercard Foundation) is providing technical assistance across three verti
 | 2\. Input Credit Structuring | Structuring support for input credit facility design and a Credit scoring system for farmers.  | Needed – TA request  |
 | 3\.  Quality Control training for all Supply Chain staff  | Training all field staff on handling, sourcing and guidelines to reduce losses or theft.  | Needed – TA request  |
 | 3\. Fundraising Support | Support for infrastructural play: fulfilment centre and logistics | Ongoing Proposal Structuring  |
-| 4\. Kasuwa/Tech Audit  |  | In Progress |
+| 4\. Kasuwa/Tech Audit  | To assess and improve Kasuwa’s technology, product, security, scalability, and business alignment, with particular emphasis on MFB readiness, data protection, infrastructure resilience, and QA/delivery practices. | In Progress |
+| 5\. ESG | Conducting an ESG diagnostic and developing a roadmap to strengthen Agriarche’s ESG practices, policies, and reporting. | In Progress |
 
 # **8\. Key Departmental Updates: HR, PMO**
 
@@ -223,7 +224,7 @@ ESP (Mastercard Foundation) is providing technical assistance across three verti
 | :---- | :---- |
 | Total Employees (End H1) | 43 |
 | Promotions | 3 (career advancement) |
-| Exits | 2 (staff rationalization) |
+| Exits | 2 |
 | New Hires | 1 (COO) |
 
 * Employee engagement survey: 70% participation, 82% satisfaction score

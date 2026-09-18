@@ -119,7 +119,7 @@
     "h2focus_bullets": []
   },
   "esp_para": [
-    "ESP (Mastercard Foundation) is providing technical assistance across three verticals. Given this work is already embedded in day-to-day operational efficiency, it is tracked here as a standing progress grid rather than as a separate Control Tower session."
+    "ESP (Mastercard Foundation) is providing technical assistance across multiple verticals. Given this work is already embedded in day-to-day operational efficiency, it is tracked here as a standing progress grid rather than as a separate Control Tower session."
   ],
   "esp_rows": [
     [
@@ -144,7 +144,12 @@
     ],
     [
       "4. Kasuwa/Tech Audit",
-      "",
+      "To assess and improve Kasuwa’s technology, product, security, scalability, and business alignment, with particular emphasis on MFB readiness, data protection, infrastructure resilience, and QA/delivery practices.",
+      "In Progress"
+    ],
+    [
+      "5. ESG",
+      "Conducting an ESG diagnostic and developing a roadmap to strengthen Agriarche’s ESG practices, policies, and reporting.",
       "In Progress"
     ]
   ],

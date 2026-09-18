@@ -560,7 +560,7 @@ export const sections: Section[] = [
             rows: [
               ["Total Employees (End H1)", "43"],
               ["Promotions", "3 (career advancement)"],
-              ["Exits", "2 (staff rationalization)"],
+              ["Exits", "2"],
               ["New Hires", "1 (COO)"],
               ["Survey Participation", "70%"],
               ["Satisfaction Score", "82%"],

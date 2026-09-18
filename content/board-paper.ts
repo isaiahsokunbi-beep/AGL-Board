@@ -540,7 +540,7 @@ export const sections: Section[] = [
       {
         id: "esp-overview",
         paragraphs: [
-          "ESP (Mastercard Foundation) is providing technical assistance across three verticals. Given this work is already embedded in day-to-day operational efficiency, it is tracked here as a standing progress grid rather than as a separate Control Tower session.",
+          "ESP (Mastercard Foundation) is providing technical assistance across multiple verticals. Given this work is already embedded in day-to-day operational efficiency, it is tracked here as a standing progress grid rather than as a separate Control Tower session.",
         ],
       },
       {
@@ -571,7 +571,12 @@ export const sections: Section[] = [
               ],
               [
                 "4. Kasuwa/Tech Audit",
-                "",
+                "To assess and improve Kasuwa’s technology, product, security, scalability, and business alignment, with particular emphasis on MFB readiness, data protection, infrastructure resilience, and QA/delivery practices.",
+                "In Progress",
+              ],
+              [
+                "5. ESG",
+                "Conducting an ESG diagnostic and developing a roadmap to strengthen Agriarche’s ESG practices, policies, and reporting.",
                 "In Progress",
               ],
             ],
@@ -593,7 +598,7 @@ export const sections: Section[] = [
             rows: [
               ["Total Employees (End H1)", "43"],
               ["Promotions", "3 (career advancement)"],
-              ["Exits", "2 (staff rationalization)"],
+              ["Exits", "2"],
               ["New Hires", "1 (COO)"],
               ["Survey Participation", "70%"],
               ["Satisfaction Score", "82%"],
